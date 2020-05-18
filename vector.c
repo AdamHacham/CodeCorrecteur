@@ -84,3 +84,68 @@ void affiche(Vector self)
  }
  printf("\n\n");
 }
+
+Vector vector_multiplication_scalaire(Vector A,int y,int (*pf)(int,int), int k){
+  
+ Vector self = NULL;
+ self = malloc(sizeof(*self));
+ self->size = A->size;
+ self->elements = (int *) malloc((self->size)*sizeof(int));
+ for(int i=0; i<self->size; i++)
+ {
+  *(self->elements+i) = (*pf)((*(A->elements+i)*y),k);
+ }
+ return self;
+}
+
+int vector_poid(Vector A)
+{
+ int res = 0;
+ for(int i = 0; i<A->size; i++)
+ {
+  if(*(A->elements+i) != 0)
+  {
+   res++;
+  }
+ }
+ return res;
+}
+
+int vector_compare(Vector A, Vector B){
+ if(A->size != B->size){
+  printf("La taille des vecteurs A et B est différents");
+  return 0;
+ }
+ for(int i=0; i<A->size; i++){
+  if(*(A->elements+i) != *(B->elements+i)){
+   return 0;
+  }
+ }
+ return 1;
+}
+
+int vector_compare_multiple(Vector A, Vector B, int k){
+ 
+ for(int i=1; i<k+1; i++){
+   if(vector_compare(vector_multiplication_scalaire(A,i,&GF,k),B) == 1){
+   return 0;
+  }
+ }
+ return 1;
+}
+
+Vector combine_vectors(Vector A, Vector B, int k){
+
+ int size = A->size + B->size;
+ int * tab = malloc(size*sizeof(int));
+ int j = 0;
+ for(int i=0; i<size; i++){
+  if(i<A->size){
+   tab[i] = A->elements[i];
+  } else {
+   tab[i] = B->elements[j];
+   j++;
+  }
+ }
+ return vector_init(size,tab,&GF,k);
+}

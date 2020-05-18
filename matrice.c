@@ -81,3 +81,103 @@ void matrice_delete(Matrice self)
 {
 }
 
+int * recupe_size(const char * name){
+   FILE* fichier = NULL;
+    //int age = 0;
+    int i=0;
+    int j=0;
+    int e = 0;
+    int size=0;
+    int *tab = malloc(sizeof tab);;
+    int caractereActuel = 0;
+    fichier = fopen(name, "r");
+    if (fichier != NULL)
+    {
+     do
+        {
+            caractereActuel = fgetc(fichier);
+            char c = caractereActuel;
+//            fscanf(fichier,"%c", c);
+            if(i < 8){
+             i++;
+             continue;
+            } else if( c == ' '){
+             j++;
+             continue;
+            } else if (c == '\n'){
+             //printf("\n");
+             size = j;
+             j = 0;
+             e++;
+             continue;
+            }else {
+
+            }
+                        
+        } while (caractereActuel != EOF);
+      tab[0] = size;
+      tab[1] = e;
+      printf("n : %d\nk : %d\n",tab[0],tab[1]);
+    }
+      return tab;
+
+}
+
+
+Matrice recupe_matrice(const char * name, int n, int k, int q){
+    FILE* fichier = NULL;
+    int i=0;
+    int j=0;
+    int x =0;
+    int e = 0;
+    char **param = malloc(((n*k)+1) * sizeof *param);
+ 
+     for(int w = 0; w<(n*k)+1; w++){
+      param[w] = malloc(3*sizeof **param);
+     }
+    int caractereActuel = 0;
+    fichier = fopen(name, "r");
+    if (fichier != NULL)
+    {
+     do
+        {
+            caractereActuel = fgetc(fichier);
+            char c = caractereActuel;
+            if(i<4 && caractereActuel == '\n'){
+             i++;
+             continue;
+            } else if( caractereActuel == ' '){
+             x = 0;
+             j++;
+             continue;
+          }
+          else if (caractereActuel == '\n'){
+             continue;
+            }else if( caractereActuel == '?'){
+             break;
+          }else if (i == 4){
+	      param[j][x] = caractereActuel;
+              x++;
+	  }
+        } while (caractereActuel != EOF);
+     
+    int *tab = malloc(n*sizeof (int));
+    int e = 0;
+    Matrice mat = NULL;
+    for(int m =0; m<n;m++){
+      tab[m] = atoi(param[e]);
+      e++;
+    }      
+    Vector v = vector_init(n,tab,&GF,q);
+    mat = matrice_add_vector(mat,v);
+    for(int a = 1; a<k ;a++){
+    for(int b = 0 ; b<n;b++){
+      tab[b] = atoi(param[e]);
+      e++;
+    }
+    Vector v1 = vector_init(n,tab,&GF,q);
+         mat = matrice_add_vector(mat,v1);
+    }      
+    return mat;
+    }
+}

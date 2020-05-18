@@ -16,5 +16,10 @@ int * vector_elements(Vector self);
 void vector_set_elements(Vector self, int * elem);
 Vector vector_addition(Vector A, Vector B, int (*pf)(int,int), int m);
 int vector_scalaire(Vector A, Vector B);
+Vector vector_multiplication_scalaire(Vector A,int y,int (*pf)(int,int), int k);
+int vector_poid(Vector A);
+int vector_compare(Vector A, Vector B);
+int vector_compare_multiple(Vector A, Vector B, int k);
+Vector combine_vectors(Vector A, Vector B, int k);
 
 #endif /* __VECTOR_H__ */
