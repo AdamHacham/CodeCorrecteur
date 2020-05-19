@@ -139,13 +139,12 @@ void affiche_matrice(const char * name){
     {
      do
         {
-            caractereActuel = fgetc(fichier);
-            int c =caractereActuel;
-            if(i < 7){
-             i++;
-             continue;
-            }
-            printf("%c ", c); // On l'affiche
+             caractereActuel = fgetc(fichier);
+             if(i >= 4){
+               printf("%c ", caractereActuel); // On l'affiche
+             } else if (caractereActuel == '\n'){
+               i++;
+             }
         } while (caractereActuel != EOF);
       printf("\n");
     }

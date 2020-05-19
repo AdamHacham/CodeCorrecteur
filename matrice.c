@@ -73,12 +73,16 @@ Matrice matrice_multiplication(Matrice A, Matrice B, int k)
  self = matrice_add_vector(self,tmp);
  free(tab);
  }
-
+ 
  return self;
 }
 
 void matrice_delete(Matrice self)
 {
+ for(int i = 0; i<self->size; i++){
+  vector_delete(self->vectors[i]);  
+ }
+ free(self);
 }
 
 int * recupe_size(const char * name){
@@ -103,6 +107,7 @@ int * recupe_size(const char * name){
              continue;
             } else if( c == ' '){
              j++;
+           
              continue;
             } else if (c == '\n'){
              //printf("\n");
@@ -130,10 +135,10 @@ Matrice recupe_matrice(const char * name, int n, int k, int q){
     int j=0;
     int x =0;
     int e = 0;
-    char **param = malloc(((n*k)+1) * sizeof *param);
+    char **param = malloc((n*k) * sizeof (char *));
  
-     for(int w = 0; w<(n*k)+1; w++){
-      param[w] = malloc(3*sizeof **param);
+     for(int w = 0; w<(n*k); w++){
+      param[w] = malloc(2*sizeof **param);
      }
     int caractereActuel = 0;
     fichier = fopen(name, "r");
@@ -142,41 +147,52 @@ Matrice recupe_matrice(const char * name, int n, int k, int q){
      do
         {
             caractereActuel = fgetc(fichier);
-            char c = caractereActuel;
-            if(i<4 && caractereActuel == '\n'){
-             i++;
-             continue;
-            } else if( caractereActuel == ' '){
-             x = 0;
-             j++;
-             continue;
-          }
-          else if (caractereActuel == '\n'){
-             continue;
-            }else if( caractereActuel == '?'){
-             break;
-          }else if (i == 4){
-	      param[j][x] = caractereActuel;
+//            char c = caractereActuel;
+          if(j >= n*k){
+           break;
+          }else if(i >= 4){
+              //printf("%c",caractereActuel);    
+//              printf("\n");
+             if((caractereActuel != ' ') && (caractereActuel != '\n')){
+    //          printf("%d\t",j);    
+ 	      param[j][x] = caractereActuel;
+  //            printf("%c\n",caractereActuel);
               x++;
-	  }
+             } else if (caractereActuel == '\n'){
+      //        printf("\n");
+//              break;
+              continue;
+             } else {
+	      param[j][x] = '\0';              
+              x=0;
+              j++;
+	     } 
+         } else if (caractereActuel == '\n' && i < 4){
+           i++;
+         } 
+  //      printf("\n");
         } while (caractereActuel != EOF);
-     
-    int *tab = malloc(n*sizeof (int));
+//printf("malloc\n");     
+    int *tab = malloc((n+1)*sizeof (int));
     int e = 0;
     Matrice mat = NULL;
     for(int m =0; m<n;m++){
-      tab[m] = atoi(param[e]);
+//     printf("%s",param[m]);  
+    tab[m] = atoi(param[e]);
       e++;
     }      
     Vector v = vector_init(n,tab,&GF,q);
     mat = matrice_add_vector(mat,v);
+//    affiche(v);
     for(int a = 1; a<k ;a++){
     for(int b = 0 ; b<n;b++){
       tab[b] = atoi(param[e]);
       e++;
     }
+
     Vector v1 = vector_init(n,tab,&GF,q);
          mat = matrice_add_vector(mat,v1);
+  //  affiche(v1);
     }      
     return mat;
     }

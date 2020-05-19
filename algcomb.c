@@ -83,7 +83,6 @@ Matrice Hamming_parite_forme_sys1(Matrice self){
  for(int i = 0 ; i< mat1->size; i++){
   mat = matrice_add_vector(mat,mat1->vectors[i]);
  }
-
  return mat;
 }
 
@@ -109,7 +108,6 @@ Matrice Hamming_gen(Matrice self,int k){
  mat2 = matrice_identite(mat->size);
  Matrice res = NULL;
  res = matrice_combine(mat2,mat,k);
-
  return res;
 }
 
@@ -183,6 +181,7 @@ Matrice gen_mot_code(Matrice self,int k){
   }
  mat = matrice_add_vector(mat,v1);
  }
+
  return mat; 
 
 
@@ -208,6 +207,7 @@ Matrice poids_enum(Matrice self,int q){
     tab[1] = 1;
     Vector v = vector_init(2,tab,&GF,1000000);
     mat = matrice_add_vector(mat,v);
+
    }
   }
 

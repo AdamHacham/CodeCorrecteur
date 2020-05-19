@@ -73,6 +73,7 @@ void commande_client(char buffer[], char *variables, char *functions, char **par
            int k = get_k(variables);
           Matrice mat = recupe_matrice(variables,n,k,100000000);
           affiche_matrice(variables);
+          matrice_delete(mat);
          }
        } else if (strcmp("Code",functions)==0){
         if(z != 3){
@@ -117,18 +118,24 @@ void commande_client(char buffer[], char *variables, char *functions, char **par
          Matrice matrix2 = NULL;
          int dim = atoi(param[1]);
          int q = atoi(param[0]);
+	printf("1\n");
          matrix1 = Hamming_parite(q,dim);
+	printf("2\n");
          matrix2 = Hamming_parite_forme_sys1(matrix1);
+	printf("3\n");
          matrix2 = Hamming_gen(matrix2,q);
+	printf("4\n");
          Code c = nouveauCode(matrix2->vectors[0]->size,matrix2->size,q);
          code_mat_gen(c, matrix2);
          ecrire_fichier(variables,c,".code");
+//           matrice_delete(matrix1);
+//           matrice_delete(matrix2);
         }
        } else if (strcmp("EnumPoid",functions)==0){
          if(z != 1){
           printf("Erreur La fonction EnumPoid prend un seul paramétre  EnumPoid(nomdelavariable);\n");
          } else {
-           printf("Yes \n");
+           printf("veuillez patientez ... \n");
            char * name = strcat(param[0],".code");
            if(cfileexists(strcat(variables,".code"))){           
             printf("Cette variable exite déjà\n");
@@ -138,10 +145,12 @@ void commande_client(char buffer[], char *variables, char *functions, char **par
            int q = get_q(name);
            Matrice mat = recupe_matrice(name,n,k,q);
            Matrice mat2 = gen_mot_code(mat,q);
-	   mat2 = poids_enum(mat2,q);
+           mat = poids_enum(mat2,q);
            Code c = nouveauCode(n,k,q);
-           code_mat_gen(c, mat2);
+           code_mat_gen(c, mat);
            ecrire_fichier(variables,c,".enumPoid");
+//           matrice_delete(mat2);
+//           matrice_delete(mat);
            }
          }
        }
